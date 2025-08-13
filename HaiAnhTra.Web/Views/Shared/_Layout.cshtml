@@ -1,0 +1,37 @@
+﻿@{
+    var title = ViewData["Title"] as string ?? "Hải Anh Trà";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title</title>
+    <meta name="description" content="Hải Anh Trà – Tinh hoa giá trị Việt. Trà Thái Nguyên, hướng dẫn pha và bảo quản, dụng cụ trà." />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    @await Html.PartialAsync("_Navbar")
+
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+
+    @await Html.PartialAsync("_Footer")
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    @RenderSection("Scripts", required: false)
+    <script>
+        (function(){
+          const nav = document.querySelector('.navbar');
+          const setH = ()=>document.documentElement.style.setProperty('--nav-h',(nav?.offsetHeight||64)+'px');
+          setH(); window.addEventListener('resize', setH);
+        })();
+    </script>
+</body>
+
+
+</html>

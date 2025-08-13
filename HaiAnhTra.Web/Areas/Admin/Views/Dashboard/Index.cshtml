@@ -1,0 +1,193 @@
+﻿@model HaiAnhTra.Web.ViewModels.AdminDashboardVM
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-3">
+    <!-- KPIs -->
+    <div class="col-12 col-lg-8">
+        <div class="card p-3">
+            <div class="row g-3">
+                <div class="col-6 col-md-4">
+                    <div class="kpi">
+                        <div class="icon"><i class="bi bi-bag fs-5"></i></div>
+                        <div>
+                            <div class="val">@Model.TotalProducts</div>
+                            <div class="sub">Sản phẩm</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="kpi">
+                        <div class="icon"><i class="bi bi-cup-hot fs-5"></i></div>
+                        <div>
+                            <div class="val">@Model.TotalTea</div>
+                            <div class="sub">Trà</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="kpi">
+                        <div class="icon"><i class="bi bi-tools fs-5"></i></div>
+                        <div>
+                            <div class="val">@Model.TotalTools</div>
+                            <div class="sub">Dụng cụ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4">
+                    <div class="kpi">
+                        <div class="icon"><i class="bi bi-newspaper fs-5"></i></div>
+                        <div>
+                            <div class="val">@Model.PublishedGuides/@Model.TotalGuides</div>
+                            <div class="sub">Bài hướng dẫn (hiển/tổng)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="kpi">
+                        <div class="icon"><i class="bi bi-person-lines-fill fs-5"></i></div>
+                        <div>
+                            <div class="val">@Model.NewLeads24h</div>
+                            <div class="sub">Lead 24h</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="kpi">
+                        <div class="icon"><i class="bi bi-calendar-week fs-5"></i></div>
+                        <div>
+                            <div class="val">@Model.LeadsThisWeek</div>
+                            <div class="sub">Lead tuần này</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="col-12 col-lg-4">
+        <div class="card p-3 h-100">
+            <h6 class="mb-3">Thao tác nhanh</h6>
+            <div class="d-grid gap-2">
+                <a class="btn btn-primary" asp-area="Admin" asp-controller="Products" asp-action="Create">
+                    <i class="bi bi-plus-lg me-1"></i> Thêm sản phẩm
+                </a>
+                <a class="btn btn-outline-primary" asp-area="Admin" asp-controller="Guides" asp-action="Create">
+                    <i class="bi bi-journal-plus me-1"></i> Thêm bài hướng dẫn
+                </a>
+                <a class="btn btn-outline-secondary" asp-area="Admin" asp-controller="Leads" asp-action="Index">
+                    <i class="bi bi-people me-1"></i> Quản lý Leads
+                </a>
+            </div>
+            <hr />
+            <div class="small text-muted">
+                Đã liên hệ: <span class="badge badge-soft">@Model.ContactedLeads</span> &nbsp;|&nbsp;
+                Đã chốt: <span class="badge badge-soft">@Model.ClosedLeads</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart: leads 7 ngày -->
+    <div class="col-12">
+        <div class="card p-3">
+            <h6 class="mb-3">Leads 7 ngày gần đây</h6>
+            <canvas id="leads7"></canvas>
+        </div>
+    </div>
+
+    <!-- Top products + Recent leads -->
+    <div class="col-12 col-lg-6">
+        <div class="card p-3">
+            <h6 class="mb-3">Top sản phẩm theo Leads (30 ngày)</h6>
+            @if (!Model.TopProducts30d.Any())
+            {
+                <div class="text-muted">Chưa có dữ liệu.</div>
+            }
+            else
+            {
+                <table class="table align-middle">
+                    <thead><tr><th>Sản phẩm</th><th class="text-end">Leads</th></tr></thead>
+                    <tbody>
+                        @foreach (var r in Model.TopProducts30d)
+                        {
+                            <tr>
+                                <td>@r.Name</td>
+                                <td class="text-end fw-semibold">@r.Leads</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card p-3">
+            <h6 class="mb-3">Leads mới nhất</h6>
+            @if (!Model.RecentLeads.Any())
+            {
+                <div class="text-muted">Chưa có lead.</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead><tr><th>Thời gian</th><th>Khách</th><th>Liên hệ</th><th>Sản phẩm</th><th>TT</th></tr></thead>
+                        <tbody>
+                            @foreach (var l in Model.RecentLeads)
+                            {
+                                <tr>
+                                    <td class="small text-muted">@l.CreatedAt.ToString("dd/MM HH:mm")</td>
+                                    <td>@l.Name</td>
+                                    <td class="small">
+                                        📞 @l.Phone
+                                        @if (!string.IsNullOrWhiteSpace(l.Email))
+                                        {
+                                            <div>✉️ @l.Email</div>
+                                        }
+                                    </td>
+                                    <td>@l.ProductName</td>
+                                    <td>@l.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary" asp-area="Admin" asp-controller="Leads" asp-action="Index">Xem tất cả</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function(){
+          const ctx = document.getElementById('leads7');
+          const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.LeadDays));
+          const data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.LeadCounts));
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Leads',
+                data: data,
+                fill: false,
+                tension: .35
+              }]
+            },
+            options: {
+              plugins:{ legend:{ display:false } },
+              scales: { y: { beginAtZero: true, ticks: { precision:0 } } }
+            }
+          });
+        })();
+    </script>
+}

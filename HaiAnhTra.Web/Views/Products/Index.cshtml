@@ -1,0 +1,52 @@
+﻿@model IEnumerable<HaiAnhTra.Web.Models.Product>
+@using HaiAnhTra.Web.Models
+@{
+    ViewData["Title"] = "Sản phẩm";
+    var currentType = Context.Request.Query["type"].ToString();
+    var q = Context.Request.Query["q"].ToString();
+}
+<h1 class="mb-4">Sản phẩm</h1>
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-md-3">
+        <label class="form-label">Danh mục</label>
+        <select name="type" class="form-select">
+            <option value="">Tất cả</option>
+            <option value="Tea" selected="@(currentType == "Tea")">Trà</option>
+            <option value="Tool" selected="@(currentType == "Tool")">Dụng cụ</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Tìm kiếm</label>
+        <input name="q" value="@q" class="form-control" placeholder="Nhập tên sản phẩm..." />
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100" type="submit">Lọc</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">Chưa có sản phẩm phù hợp.</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="@item.ImageUrl" class="card-img-top object-fit-cover" style="height:180px" alt="@item.Name" />
+                    <div class="card-body">
+                        <h3 class="h6 card-title">@item.Name</h3>
+                        @if (item.Price.HasValue)
+                        {
+                            <div class="text-muted small">Giá tham khảo: @item.Price.Value.ToString("#,##0") đ</div>
+                        }
+                        <p class="small text-secondary">@item.ShortDescription</p>
+                        <a class="stretched-link" asp-action="Details" asp-route-slug="@(item.Slug ?? item.Id.ToString())">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@model HaiAnhTra.Web.Helpers.PaginatedList<HaiAnhTra.Web.Models.Guide>
+@{
+    ViewData["Title"] = "Bài hướng dẫn"; var q = ViewBag.Q as string; bool? pb = ViewBag.Published as bool?;
+}
+<h1 class="mb-3">Bài hướng dẫn</h1>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6">
+        <label class="form-label">Tìm</label>
+        <input name="q" value="@q" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Trạng thái</label>
+        <select name="published" class="form-select">
+            <option value="">Tất cả</option>
+            <option value="true" selected="@(pb == true)">Hiển</option>
+            <option value="false" selected="@(pb == false)">Ẩn</option>
+        </select>
+    </div>
+    <div class="col-md-3"><button class="btn btn-primary w-100" type="submit">Lọc</button></div>
+</form>
+
+<div class="mb-3"><a class="btn btn-success" asp-action="Create">+ Thêm bài</a></div>
+
+<table class="table table-hover">
+    <thead><tr><th>Tiêu đề</th><th>Slug</th><th>Ngày</th><th>TT</th><th></th></tr></thead>
+    <tbody>
+        @foreach (var g in Model)
+        {
+            <tr>
+                <td>@g.Title</td>
+                <td>@g.Slug</td>
+                <td>@g.PublishedAt.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <form asp-action="TogglePublish" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@g.Id" />
+                        <button class="btn btn-sm @(g.IsPublished ? "btn-outline-success" : "btn-outline-secondary")">
+                            @(g.IsPublished ? "Hiển" : "Ẩn")
+                        </button>
+                    </form>
+                </td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@g.Id">Sửa</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@g.Id">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@await Html.PartialAsync("_Pager", Model)

@@ -1,0 +1,25 @@
+﻿@model HaiAnhTra.Web.Models.Guide
+@{
+    ViewData["Title"] = "Xóa bài hướng dẫn";
+}
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<div class="alert alert-warning">
+    Bạn có chắc muốn xóa bài: <strong>@Model.Title</strong> ?
+</div>
+
+<dl class="row">
+    <dt class="col-sm-2">Slug</dt>
+    <dd class="col-sm-10">@Model.Slug</dd>
+    <dt class="col-sm-2">Ngày đăng</dt>
+    <dd class="col-sm-10">@Model.PublishedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-2">Trạng thái</dt>
+    <dd class="col-sm-10">@((Model.IsPublished) ? "Hiển" : "Ẩn")</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
+</form>

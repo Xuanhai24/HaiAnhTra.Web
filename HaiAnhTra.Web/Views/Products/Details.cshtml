@@ -1,0 +1,21 @@
+﻿@model HaiAnhTra.Web.Models.Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+<div class="row g-4">
+    <div class="col-md-6 py-5">
+        <img src="@Model.ImageUrl" class="img-fluid rounded-3 shadow-sm" alt="@Model.Name" />
+    </div>
+    <div class="col-md-6">
+        <h1 class="h3">@Model.Name</h1>
+        @if (Model.Price.HasValue)
+        {
+            <div class="fs-5 mb-2" style="color:var(--tea-caramel)">Giá tham khảo: @Model.Price.Value.ToString("#,##0") đ</div>
+        }
+        <div class="mb-3 text-muted">@Model.ShortDescription</div>
+        <article class="mb-4">@Html.Raw(Model.Description)</article>
+
+        <h2 class="h5 mb-2">Đăng ký tư vấn</h2>
+        @await Html.PartialAsync("_LeadForm", new HaiAnhTra.Web.Models.Lead { ProductId = Model.Id })
+    </div>
+</div>

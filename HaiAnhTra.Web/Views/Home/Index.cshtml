@@ -1,0 +1,253 @@
+﻿@using HaiAnhTra.Web.Models
+@model HaiAnhTra.Web.ViewModels.HomeVM
+@{
+    ViewData["Title"] = "Hải Anh Trà – Tinh Hoa Giá Trị Việt";
+}
+
+<!-- HERO IMAGE: full-screen 1 trang, ảnh nền + overlay đen vừa phải -->
+<section id="hero"
+         class="hero-img full-bleed"
+         style="--hero-image:url('/images/hero.png'); --hero-pos:center 35%;">
+    <div class="hero-img__bg" aria-hidden="true"></div>
+    <div class="hero-img__overlay"></div>
+
+    <div class="hero-img__content container text-center text-white">
+        <h1 class="hero-title fw-extrabold mb-3">Hải Anh Trà</h1>
+        <p class="hero-sub lead mb-4">Tinh Hoa Giá Trị Việt — chất vị mộc, hậu ngọt thanh.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a class="btn btn-light btn-lg px-4" asp-controller="Products" asp-action="Index" asp-route-type="Tea">Khám phá Trà</a>
+            <a class="btn btn-outline-light btn-lg px-4" asp-controller="Guides" asp-action="Index">Hướng dẫn</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== STORY (câu chuyện thương hiệu) ===== -->
+<section id="story" class="container mb-5">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-5">
+            <div class="story-card p-4 rounded-4">
+                <h2 class="fw-bold mb-3">Câu chuyện Hải Anh Trà</h2>
+                <p class="text-muted mb-3">
+                    Từ nương chè Thái Nguyên, chúng tôi tôn trọng quy trình thủ công – tuyển chọn, sao sấy, bảo quản kỹ, để giữ trọn hậu vị ngọt thanh.
+                </p>
+                <ul class="v-timeline">
+                    <li><span class="dot"></span><div><strong>Tuyển búp chuẩn</strong><br /><span class="text-muted">Chọn lứa búp non, đạt độ ẩm lý tưởng.</span></div></li>
+                    <li><span class="dot"></span><div><strong>Sao – vê – hạ hương</strong><br /><span class="text-muted">Thủ công, canh nhiệt – thời gian chuẩn.</span></div></li>
+                    <li><span class="dot"></span><div><strong>Bảo quản kín</strong><br /><span class="text-muted">Hút ẩm – chống nắng – giữ hương lâu.</span></div></li>
+                </ul>
+                <a class="btn btn-primary mt-2" asp-controller="Guides" asp-action="Index">Xem quy trình & hướng dẫn</a>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="story-figure rounded-4 overflow-hidden position-relative">
+                <img src="~/images/sections/story.png" class="w-100 object-fit-cover" style="height:460px;" alt="Câu chuyện Hải Anh Trà" />
+                <div class="story-figure__overlay"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURED TEAS ===== -->
+<section id="teas" class="container mb-5">
+    <div class="d-flex align-items-end justify-content-between mb-3">
+        <div>
+            <h2 class="fw-bold m-0">Dòng Trà nổi bật</h2>
+            <div class="text-muted">Hậu ngọt, cân bằng, hiển thị giá tham khảo — đặt tư vấn nhanh.</div>
+        </div>
+        <a class="btn btn-outline-primary" asp-controller="Products" asp-action="Index" asp-route-type="Tea">Xem tất cả</a>
+    </div>
+
+    @if (!Model.FeaturedTeas.Any())
+    {
+        <div class="alert alert-warning">Chưa có sản phẩm trà.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var p in Model.FeaturedTeas)
+            {
+                <div class="col-6 col-md-4 col-xl-3">
+                    <div class="tea-card h-100 rounded-4 overflow-hidden card-hover">
+                        <div class="tea-card__img">
+                            <img src="@p.ImageUrl" alt="@p.Name" />
+                        </div>
+                        <div class="tea-card__body">
+                            <h3 class="h6 mb-1">@p.Name</h3>
+                            @if (p.Price.HasValue)
+                            {
+                                <div class="text-muted small">Giá tham khảo: @p.Price.Value.ToString("#,##0") đ</div>
+                            }
+                            <div class="small text-secondary">@p.ShortDescription</div>
+                            <div class="mt-2 d-flex gap-2">
+                                <a class="btn btn-sm btn-primary" asp-controller="Products" asp-action="Details" asp-route-slug="@(p.Slug ?? p.Id.ToString())">Chi tiết</a>
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Contact" asp-action="Index">Tư vấn</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+<!-- ===== FEATURED TOOLS ===== -->
+<section id="tools" class="container mb-5">
+    <div class="d-flex align-items-end justify-content-between mb-3">
+        <div>
+            <h2 class="fw-bold m-0">Dụng cụ pha trà</h2>
+            <div class="text-muted">Ấm – chén – phụ kiện, đồng bộ thẩm mỹ & công năng.</div>
+        </div>
+        <a class="btn btn-outline-primary" asp-controller="Products" asp-action="Index" asp-route-type="Tool">Xem tất cả</a>
+    </div>
+
+    @if (!Model.FeaturedTools.Any())
+    {
+        <div class="alert alert-warning">Chưa có dụng cụ.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var p in Model.FeaturedTools)
+            {
+                <div class="col-6 col-md-4 col-xl-3">
+                    <div class="tool-card h-100 rounded-4 overflow-hidden card-hover">
+                        <div class="tool-card__img">
+                            <img src="@p.ImageUrl" alt="@p.Name" />
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="h6 mb-1">@p.Name</h3>
+                            <div class="small text-secondary">@p.ShortDescription</div>
+                            <div class="mt-2 d-flex gap-2">
+                                <a class="btn btn-sm btn-primary" asp-controller="Products" asp-action="Details" asp-route-slug="@(p.Slug ?? p.Id.ToString())">Chi tiết</a>
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Contact" asp-action="Index">Tư vấn</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+<!-- ===== RITUAL (nghi lễ pha) ===== -->
+<section id="ritual" class="container mb-5">
+    <div class="rounded-4 p-4 ritual-wrap">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-2">Nghi lễ pha trà</h2>
+                <p class="text-muted mb-3">Bốn bước cơ bản – dễ nhớ, đúng vị.</p>
+                <ol class="ritual-steps">
+                    <li><span>1</span> Tráng ấm – làm ấm chén</li>
+                    <li><span>2</span> Đong trà – ủ khô (5–10 giây)</li>
+                    <li><span>3</span> Chế nước đúng nhiệt – ủ (15–25 giây)</li>
+                    <li><span>4</span> Rót đều – thưởng trà</li>
+                </ol>
+                <a class="btn btn-primary" asp-controller="Guides" asp-action="Index">Xem chi tiết từng loại</a>
+            </div>
+            <div class="col-lg-6">
+                <div class="brew-figure rounded-4 overflow-hidden">
+                    <img src="~/images/sections/brewing.jpg" class="w-100 object-fit-cover" style="height:320px;" alt="Nghi lễ pha trà" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== VOICES (cảm nhận) ===== -->
+<section id="voices" class="container mb-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Cảm nhận</h2>
+        <p class="text-muted">Từ khách hàng & đại lý thân thiết</p>
+    </div>
+    <div class="voices-carousel rounded-4 p-3">
+        <div class="voice"><q>Hậu vị ngọt rất rõ, hương cốm nhẹ. Hướng dẫn pha cực dễ.</q><div class="by">— Anh Nam, Hà Nội</div></div>
+        <div class="voice"><q>Đóng gói kỹ, tư vấn nhanh. Dòng trà phù hợp nhiều khách.</q><div class="by">— Chị Hương, Thái Nguyên</div></div>
+        <div class="voice"><q>Dụng cụ đồng bộ, bày bàn rất đẹp. Khách khen liên tục.</q><div class="by">— Quán Trà Xưa & Nay</div></div>
+    </div>
+</section>
+
+<!-- ===== GUIDES (bài viết) ===== -->
+<section id="guides" class="container mb-5">
+    <div class="d-flex align-items-end justify-content-between mb-3">
+        <div>
+            <h2 class="fw-bold m-0">Bài hướng dẫn mới</h2>
+            <div class="text-muted">Pha – bảo quản – chọn trà theo gu</div>
+        </div>
+        <a class="btn btn-outline-primary" asp-controller="Guides" asp-action="Index">Xem tất cả</a>
+    </div>
+
+    @if (!Model.LatestGuides.Any())
+    {
+        <div class="alert alert-info">Chưa có bài viết.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var g in Model.LatestGuides)
+            {
+                <div class="col-md-4">
+                    <a class="guide-card d-block rounded-4 p-3 card-hover" asp-controller="Guides" asp-action="Details" asp-route-slug="@(g.Slug ?? g.Id.ToString())">
+                        <div class="small text-muted mb-1">@g.PublishedAt.ToString("dd/MM/yyyy")</div>
+                        <h3 class="h6 m-0">@g.Title</h3>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+<!-- ===== CONTACT CTA ===== -->
+<section id="contact" class="container mb-5">
+    <div class="cta-strip rounded-4 p-4 d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3">
+        <div class="h5 m-0 text-white">Cần gợi ý chọn trà theo gu? Để lại thông tin – chúng tôi gọi lại trong 24h.</div>
+        <a class="btn btn-light" asp-controller="Contact" asp-action="Index">Nhận tư vấn</a>
+    </div>
+</section>
+
+@section Scripts {
+    <!-- Set chiều cao navbar để hero vừa 1 trang -->
+    <script>
+        (function(){
+          const setH = () => {
+            const nav = document.querySelector('.navbar');
+            const h = (nav?.offsetHeight || 64) + 'px';
+            document.documentElement.style.setProperty('--nav-h', h);
+          };
+          setH(); window.addEventListener('resize', setH);
+        })();
+    </script>
+
+    <!-- GSAP (chỉ animate content; nền là ảnh tĩnh) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script>
+        (function(){
+          gsap.registerPlugin(ScrollTrigger);
+          // split text
+          function splitText(el){
+            const text = el.textContent.trim();
+            el.innerHTML = text.split("").map(ch => `<span class="ch">${ch===' ' ? '&nbsp;' : ch}</span>`).join("");
+            return el.querySelectorAll(".ch");
+          }
+          const title = document.querySelector("[data-split]");
+          const chars = title ? splitText(title) : [];
+          if (chars.length){
+            gsap.from(chars, { y: 38, opacity: 0, rotateZ: 2, ease: "expo.out", duration: 1.05,
+                               stagger: { each: 0.02, from: "center" } });
+            gsap.from(".hero-sub", { y: 16, opacity: 0, duration: .8, delay: .15, ease: "power3.out" });
+            gsap.from(".hero-img__content .btn", { y: 14, opacity: 0, duration: .7, delay: .25, stagger:.08, ease: "power3.out" });
+          }
+          // overlay fade nhẹ khi cuộn
+          gsap.to(".hero-img__overlay", {
+            opacity: 0.85, ease: "none",
+            scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom top", scrub:true }
+          });
+          // reveal các khối
+          ScrollTrigger.batch(".tea-card, .tool-card, .story-card, .story-figure, .guide-card, .brew-figure, .ritual-steps li", {
+            onEnter: batch => gsap.from(batch, { y: 30, opacity: 0, duration: .7, ease: "power2.out", stagger: 0.06 }),
+            start: "top 85%"
+          });
+        })();
+    </script>
+}
+    

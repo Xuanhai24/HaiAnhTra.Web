@@ -1,0 +1,30 @@
+﻿@model HaiAnhTra.Web.Models.Lead
+<form asp-action="CreateLead" asp-controller="Products" method="post" class="lead-form p-3 rounded-3" style="background:var(--tea-cream); border:1px solid #eee">
+    @Html.AntiForgeryToken()
+    <input asp-for="ProductId" type="hidden" />
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Họ và tên</label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Số điện thoại</label>
+            <input asp-for="Phone" class="form-control" required />
+            <span asp-validation-for="Phone" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Email (tuỳ chọn)</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Nội dung</label>
+            <textarea asp-for="Message" class="form-control" rows="3" placeholder="Tôi quan tâm sản phẩm..."></textarea>
+        </div>
+    </div>
+    <div class="mt-3 d-flex align-items-center gap-2">
+        <button type="submit" class="btn btn-primary">Gửi thông tin tư vấn</button>
+        <small class="text-muted">Chúng tôi sẽ liên hệ trong giờ làm việc.</small>
+    </div>
+</form>

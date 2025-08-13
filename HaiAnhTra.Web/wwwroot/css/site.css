@@ -1,0 +1,466 @@
+﻿/* =========================
+   Base & Typography
+   ========================= */
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+/* Focus rings */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
+}
+
+/* =========================
+   Palette & Globals
+   ========================= */
+:root {
+    --tea-olive: #606c38;
+    --tea-deep: #283618;
+    --tea-cream: #fefae0;
+    --tea-amber: #dda15e;
+    --tea-caramel: #bc6c25;
+    --tea-burgundy: #38040e;
+    --tea-brown: #432818; /* Navbar truyền thống */
+    --nav-h: 64px; /* JS sẽ cập nhật theo chiều cao navbar thực */
+}
+
+body {
+    background: var(--tea-cream);
+    color: var(--tea-deep);
+}
+
+a {
+    color: var(--tea-caramel);
+}
+
+    a:hover {
+        color: var(--tea-amber);
+    }
+
+.btn-primary {
+    background: var(--tea-olive);
+    border-color: var(--tea-olive);
+}
+
+    .btn-primary:hover {
+        background: var(--tea-caramel);
+        border-color: var(--tea-caramel);
+    }
+
+.card {
+    border-radius: 16px;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.navbar-brand {
+    letter-spacing: .3px;
+}
+
+/* Navbar override */
+.navbar {
+    background: var(--tea-brown) !important;
+}
+
+/* =========================
+   Full-bleed helper (phá khung .container)
+   ========================= */
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+
+/* =========================
+   HERO COVER (full-screen, chấp nhận cắt)
+   ========================= */
+.hero-cover {
+    position: relative;
+    min-height: calc(100svh - var(--nav-h)); /* luôn vừa đúng 1 trang */
+    isolation: isolate;
+    overflow: hidden;
+    background: #000; /* tránh ló nền sáng khi tải video */
+}
+
+.hero-cover__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* chấp nhận cắt nhẹ để không viền đen */
+    object-position: center center; /* tâm khung */
+    z-index: 1;
+}
+
+.hero-cover__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.58));
+    z-index: 2;
+}
+
+.hero-cover__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: #fff;
+    padding: clamp(72px, 10svh, 140px) 16px; /* đẹp trên mọi màn hình */
+}
+
+/* =========================
+   Legacy gradient hero (nếu cần dùng chỗ khác)
+   ========================= */
+.section-hero {
+    background: linear-gradient(135deg, var(--tea-olive), var(--tea-burgundy));
+    color: #fff;
+}
+
+/* =========================
+   Feature cards & CTA (đã dùng trước đó)
+   ========================= */
+.fx-card {
+    height: 280px;
+}
+
+.fx-card__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.06);
+    transition: transform .6s ease;
+}
+
+.fx-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.55));
+}
+
+.fx-card__content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.fx-card:hover .fx-card__bg {
+    transform: scale(1.12);
+}
+
+@media (min-width: 992px) {
+    .fx-card {
+        height: 320px;
+    }
+}
+
+.why-card {
+    background: var(--tea-cream);
+    border: 1px solid #eee;
+}
+
+.why-ico {
+    font-size: 1.8rem;
+    margin-bottom: .5rem;
+}
+
+.cta-strip {
+    background: linear-gradient(90deg, #432818, #2b1a10);
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+/* Full-bleed: bung full chiều ngang */
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+
+/* Navbar height (JS sẽ cập nhật) */
+:root {
+    --nav-h: 64px;
+}
+
+/* HERO SMART – 1 trang, cover (cắt nhẹ), KHÔNG scale video */
+.hero-smart {
+    position: relative;
+    min-height: calc(100svh - var(--nav-h));
+    background: #000;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.hero-smart__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* chấp nhận cắt nhẹ */
+    object-position: center center;
+    transform: none !important; /* NGĂN mọi scale/translate tồn đọng */
+}
+
+.hero-smart__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.58));
+    z-index: 2;
+}
+
+.hero-smart__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: #fff;
+    padding: clamp(72px, 10svh, 140px) 16px;
+}
+/* Full-bleed để hero bung đủ 100vw */
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+
+/* Sử dụng biến chiều cao navbar, JS sẽ cập nhật */
+:root {
+    --nav-h: 64px;
+}
+
+/* HERO IMAGE */
+.hero-img {
+    position: relative;
+    min-height: calc(100svh - var(--nav-h)); /* đúng 1 trang */
+    isolation: isolate;
+    overflow: hidden;
+    background: #000;
+}
+/* nền ảnh */
+.hero-img__bg {
+    position: absolute;
+    inset: 0;
+    background: center/cover no-repeat var(--hero-image, url('/images/hero.jpg'));
+    transform: scale(1.02); /* rất nhẹ để tránh viền trắng khi zoom */
+    z-index: 1;
+}
+/* overlay đen nhẹ */
+.hero-img__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.58));
+    z-index: 2;
+}
+/* nội dung */
+.hero-img__content {
+    position: relative;
+    z-index: 3;
+    padding: clamp(72px, 10svh, 140px) 16px;
+}
+/* ===== Fix khoảng thừa dưới navbar trong template mặc định ===== */
+header.border-bottom {
+    border-bottom: 0 !important;
+}
+
+header.mb-3 {
+    margin-bottom: 0 !important;
+}
+/* Nếu nav đang là .navbar có margin-bottom, triệt luôn: */
+.navbar {
+    margin-bottom: 0 !important;
+}
+
+/* ===== Hero image full screen ===== */
+:root {
+    --nav-h: 64px;
+}
+
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+}
+
+.hero-img {
+    position: relative;
+    min-height: calc(100svh - var(--nav-h)); /* đúng 1 trang */
+    isolation: isolate;
+    overflow: hidden;
+    background: #000;
+}
+
+/* Ảnh nền – có thể chỉnh vị trí bằng --hero-pos */
+.hero-img__bg {
+    position: absolute;
+    inset: 0;
+    background-image: var(--hero-image, url('/images/hero.jpg'));
+    background-size: cover;
+    background-position: var(--hero-pos, center);
+    transform: none; /* không phóng */
+    z-index: 1;
+}
+
+/* Overlay đen: đậm hơn để chữ nổi, nhưng vẫn êm */
+.hero-img__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.50), rgba(0,0,0,.72));
+    z-index: 2;
+}
+
+/* Nội dung trung tâm – scale theo màn hình, giới hạn chiều rộng để cân đối */
+.hero-img__content {
+    position: relative;
+    z-index: 3;
+    padding: clamp(72px, 12svh, 160px) 16px;
+    display: grid;
+    place-items: center;
+}
+
+    .hero-img__content > * {
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+/* Typography lớn hơn, cân với nền */
+.hero-title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.05;
+    text-shadow: 0 8px 30px rgba(0,0,0,.35);
+    letter-spacing: .2px;
+}
+
+.hero-sub {
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    color: rgba(255,255,255,.88);
+}
+
+/* Nút rõ ràng hơn một chút */
+.hero-img__content .btn {
+    box-shadow: 0 6px 24px rgba(0,0,0,.12);
+    border-width: 2px;
+}
+
+/* Nếu muốn chữ nhích lên/ xuống một chút so với tâm: */
+/* .hero-img__content{ align-content: center; } */
+/* ===== NAVBAR Hải Anh Trà ===== */
+.nav-ha {
+    background: #432818 !important; /* nâu truyền thống */
+    margin-bottom: 0 !important; /* triệt khoảng thừa dưới nav */
+}
+
+    .nav-ha .brand-logo {
+        height: 36px;
+        width: auto;
+        object-fit: contain;
+        border-radius: 6px;
+    }
+
+    .nav-ha .navbar-brand {
+        letter-spacing: .2px;
+    }
+
+    .nav-ha .nav-link {
+        color: rgba(255,255,255,.88);
+        font-weight: 600;
+        padding: .6rem .9rem;
+    }
+
+        .nav-ha .nav-link:hover,
+        .nav-ha .nav-link:focus {
+            color: #fff;
+        }
+
+        .nav-ha .nav-link.active {
+            color: #fff;
+            position: relative;
+        }
+
+            .nav-ha .nav-link.active::after {
+                content: "";
+                position: absolute;
+                left: 12px;
+                right: 12px;
+                bottom: 4px;
+                height: 2px;
+                background: #dda15e;
+                border-radius: 2px; /* gạch chân mềm màu amber */
+            }
+
+/* Nút Admin */
+.btn-admin {
+    background: var(--tea-caramel);
+    color: #fff;
+    border: 0;
+    padding: .4rem .75rem;
+    border-radius: .5rem;
+    font-weight: 600;
+}
+
+    .btn-admin:hover {
+        filter: brightness(1.06);
+        color: #fff;
+    }
+
+/* Nếu layout gốc có border/margin trên header, triệt tiêu luôn: */
+header.border-bottom, header.mb-3 {
+    border-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Cập nhật biến chiều cao nav cho hero full-screen (nếu bạn đang dùng hero 1 trang) */
+:root {
+    --nav-h: 64px;
+}
+
+@media (min-width: 992px) {
+    :root {
+        --nav-h: 64px;
+    }
+    /* chỉnh nếu nav cao hơn */
+}
+/* Product thumbnails: center-crop, khung vuông */
+.tea-card__img,
+.tool-card__img,
+.prod-thumb {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1/1; /* đổi 4/3 nếu bạn thích: 4 / 3 */
+    background: #f6f6f6;
+    border-radius: 12px;
+}
+
+    .tea-card__img img,
+    .tool-card__img img,
+    .prod-thumb img,
+    .product-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* cắt đều để lấp đầy */
+        object-position: center; /* tâm hình -> đều 2 bên */
+        display: block;
+    }

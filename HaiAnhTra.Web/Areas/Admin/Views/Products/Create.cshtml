@@ -1,0 +1,74 @@
+﻿@model HaiAnhTra.Web.ViewModels.ProductFormVM
+@using HaiAnhTra.Web.Models
+@{
+    var isEdit = Model.Id != Guid.Empty; ViewData["Title"] = isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm";
+}
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<form asp-action="@(isEdit?"Edit":"Create")" method="post" enctype="multipart/form-data" class="row g-3">
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="col-md-8">
+        <label class="form-label">Tên</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Slug</label>
+        <input asp-for="Slug" class="form-control" placeholder="bỏ trống tự sinh" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Loại</label>
+        <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<ProductType>()"></select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Giá tham khảo</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Đơn vị</label>
+        <input asp-for="Unit" class="form-control" />
+    </div>
+    <div class="col-12">
+        <label class="form-label">Mô tả ngắn</label>
+        <input asp-for="ShortDescription" class="form-control" />
+    </div>
+    <div class="col-12">
+        <label class="form-label">Mô tả chi tiết</label>
+        <textarea asp-for="Description" class="form-control" rows="6"></textarea>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Xuất xứ</label>
+        <input asp-for="Origin" class="form-control" />
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Hương/vị</label>
+        <input asp-for="FlavorNotes" class="form-control" />
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Hình hiện tại</label>
+        <div>
+            @(string.IsNullOrWhiteSpace(Model.ImageUrl) ? "(Chưa có)" : Html.Raw($"<img src=\"{Model.ImageUrl}\" style=\"max-width:180px;border-radius:10px\"/>"))
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Tải ảnh mới</label>
+        <input asp-for="ImageFile" type="file" accept="image/*" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Thứ tự</label>
+        <input asp-for="SortOrder" class="form-control" />
+    </div>
+    <div class="col-md-4 form-check mt-4 ms-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label" for="IsActive">Hiển thị</label>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-primary" type="submit">Lưu</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Hủy</a>
+    </div>
+</form>

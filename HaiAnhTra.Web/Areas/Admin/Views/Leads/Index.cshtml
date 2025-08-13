@@ -1,0 +1,75 @@
+﻿@model HaiAnhTra.Web.Helpers.PaginatedList<HaiAnhTra.Web.Models.Lead>
+@using HaiAnhTra.Web.Models
+@{
+    ViewData["Title"] = "Lead tư vấn";
+    var q = ViewBag.Q as string; var status = ViewBag.Status as int?;
+    DateTime? from = ViewBag.From as DateTime?; DateTime? to = ViewBag.To as DateTime?;
+}
+<h1 class="mb-3">Lead tư vấn</h1>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-4"><label class="form-label">Tìm</label><input name="q" value="@q" class="form-control" placeholder="tên/điện thoại/email" /></div>
+    <div class="col-md-2">
+        <label class="form-label">Trạng thái</label>
+        <select name="status" class="form-select">
+            <option value="">Tất cả</option>
+            @foreach (LeadStatus s in Enum.GetValues(typeof(LeadStatus)))
+            {
+                <option value="@((int)s)" selected="@(status == (int)s)">@s</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2"><label class="form-label">Từ</label><input type="date" name="from" value="@from?.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col-md-2"><label class="form-label">Đến</label><input type="date" name="to" value="@to?.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col-md-2 d-flex gap-2">
+        <button class="btn btn-primary w-100" type="submit">Lọc</button>
+        <a class="btn btn-outline-secondary w-100" asp-action="ExportCsv" asp-route-q="@q" asp-route-status="@status" asp-route-from="@from" asp-route-to="@to">CSV</a>
+    </div>
+</form>
+
+<form asp-action="BulkUpdate" method="post">
+    @Html.AntiForgeryToken()
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th style="width:28px"><input type="checkbox" id="chkAll" onclick="document.querySelectorAll('[name=selectedIds]').forEach(x=>x.checked=this.checked)" /></th>
+                    <th>Thời gian</th>
+                    <th>Khách</th>
+                    <th>Liên hệ</th>
+                    <th>Sản phẩm</th>
+                    <th>Ghi chú</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var l in Model)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="selectedIds" value="@l.Id" /></td>
+                        <td class="small text-muted">@l.CreatedAt.ToString("dd/MM HH:mm")</td>
+                        <td>@l.Name</td>
+                        <td><div class="small">📞 @l.Phone</div>@if(!string.IsNullOrWhiteSpace(l.Email)){
+                        <div class="small">✉️ @l.Email</div>
+                    }
+</td>
+                    <td>@l.Product?.Name</td>
+                    <td class="small text-muted">@l.Message</td>
+                    <td>@l.Status</td>
+                </tr>
+                                }
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <select name="status" class="form-select" style="max-width:200px">
+            @foreach (LeadStatus s in Enum.GetValues(typeof(LeadStatus)))
+            {
+                <option value="@((int)s)">@s</option>
+            }
+        </select>
+        <button class="btn btn-primary" type="submit">Cập nhật hàng loạt</button>
+    </div>
+</form>
+
+@await Html.PartialAsync("_Pager", Model)

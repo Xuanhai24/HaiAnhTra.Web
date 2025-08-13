@@ -1,0 +1,9 @@
+﻿@model HaiAnhTra.Web.Models.Guide
+@{
+    ViewData["Title"] = Model.Title;
+}
+<article class="prose">
+    <h1 class="h3 mb-3">@Model.Title</h1>
+    <div class="text-muted small mb-3">Cập nhật: @Model.PublishedAt.ToString("dd/MM/yyyy")</div>
+    <div>@Html.Raw(Model.Content)</div>
+</article>

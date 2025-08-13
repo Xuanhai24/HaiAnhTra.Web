@@ -1,0 +1,20 @@
+﻿@* Không khai báo @model để nhận mọi PaginatedList<T> *@
+@{
+    dynamic pg = Model; // Model là PaginatedList<T>
+}
+@if (pg.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(pg.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" href="?page=@(pg.PageIndex - 1)">« Trước</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">Trang @pg.PageIndex/@pg.TotalPages (Tổng @pg.TotalCount)</span>
+            </li>
+            <li class="page-item @(pg.HasNextPage ? "" : "disabled")">
+                <a class="page-link" href="?page=@(pg.PageIndex + 1)">Sau »</a>
+            </li>
+        </ul>
+    </nav>
+}

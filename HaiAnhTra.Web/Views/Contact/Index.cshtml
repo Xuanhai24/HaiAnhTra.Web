@@ -1,0 +1,7 @@
+﻿@model HaiAnhTra.Web.Models.Lead
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+<h1 class="mb-3">Liên hệ tư vấn</h1>
+<p class="text-muted">Để lại thông tin, chúng tôi sẽ gọi lại sớm.</p>
+@await Html.PartialAsync("_LeadForm", Model ?? new HaiAnhTra.Web.Models.Lead())
