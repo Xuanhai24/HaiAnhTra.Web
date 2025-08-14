@@ -4,15 +4,202 @@
     ViewData["Title"] = "Hải Anh Trà – Tinh Hoa Giá Trị Việt";
 }
 
+<!-- ========== OPTIONAL STYLE: có thể chuyển sang site.css ========== -->
+<style>
+    :root {
+        --nav-h: 64px;
+    }
+    /* HERO full screen với parallax nhẹ */
+    #hero.hero-img {
+        position: relative;
+        min-height: calc(100vh - var(--nav-h));
+        display: grid;
+        place-items: center;
+        overflow: clip;
+    }
+
+    .hero-img__bg {
+        position: absolute;
+        inset: 0;
+        background-image: var(--hero-image);
+        background-size: cover;
+        background-position: var(--hero-pos, center);
+        transform: translateY(0);
+        will-change: transform;
+        transition: transform .2s ease-out;
+    }
+
+    .hero-img__overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(120% 80% at 50% 20%, rgba(0,0,0,.25), rgba(0,0,0,.55));
+        opacity: .65;
+    }
+
+    .hero-img__content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        letter-spacing: .5px;
+    }
+    /* SVG trang trí dưới tiêu đề */
+    .hero-underline {
+        width: min(520px, 90vw);
+        margin: 12px auto 0;
+        display: block;
+    }
+    /* Cards hover tilt */
+    .card-hover {
+        transform: perspective(800px) translateZ(0);
+        transition: transform .25s ease, box-shadow .25s ease;
+        will-change: transform;
+    }
+
+        .card-hover:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,.12);
+        }
+
+    .tea-card__img, .tool-card__img {
+        aspect-ratio: 4 / 3;
+        background: #f7f7f7;
+    }
+
+        .tea-card__img img, .tool-card__img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transform: scale(1.01);
+            transition: transform .6s cubic-bezier(.2,.7,.2,1);
+        }
+
+    .card-hover:hover .tea-card__img img,
+    .card-hover:hover .tool-card__img img {
+        transform: scale(1.06);
+    }
+
+    /* Timeline chấm tròn đẹp hơn */
+    .v-timeline {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 12px;
+    }
+
+        .v-timeline li {
+            display: grid;
+            grid-template-columns: 20px 1fr;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .v-timeline .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            display: inline-block;
+            margin-top: 6px;
+            background: linear-gradient(180deg, #2ecc71, #27ae60);
+            box-shadow: 0 0 0 3px rgba(39,174,96,.15);
+        }
+
+    /* CTA strip nền gradient */
+    .cta-strip {
+        background: linear-gradient(135deg,#0ea5e9,#22c55e);
+    }
+
+    /* Ritual steps số tròn */
+    .ritual-steps {
+        padding-left: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+    }
+
+        .ritual-steps li {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+            .ritual-steps li span {
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                display: inline-grid;
+                place-items: center;
+                background: #0ea5e9;
+                color: #fff;
+                font-weight: 700;
+                font-size: .9rem;
+                box-shadow: 0 2px 8px rgba(14,165,233,.35)
+            }
+    /* Lớp hiệu ứng trong hero */
+    .hero-fx {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Nút có ripple click */
+    .btn {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn .rfx {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fff;
+            opacity: .35;
+            transform: translate(-50%,-50%) scale(0);
+            pointer-events: none;
+        }
+
+    /* Story figure dùng clip-path reveal */
+    .story-figure {
+        clip-path: inset(12% 12% round 24px);
+    }
+
+    /* Voices carousel: chỉ hiển thị 1 item (JS sẽ fade) */
+    .voices-carousel .voice {
+        display: none;
+    }
+
+        .voices-carousel .voice.is-active {
+            display: block;
+        }
+
+</style>
+
 <!-- HERO IMAGE: full-screen 1 trang, ảnh nền + overlay đen vừa phải -->
 <section id="hero"
          class="hero-img full-bleed"
          style="--hero-image:url('/images/hero.png'); --hero-pos:center 35%;">
     <div class="hero-img__bg" aria-hidden="true"></div>
     <div class="hero-img__overlay"></div>
-
+    <svg class="hero-fx" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <!-- nhóm “hơi trà” sẽ được thêm circle động bằng JS -->
+    </svg>
     <div class="hero-img__content container text-center text-white">
-        <h1 class="hero-title fw-extrabold mb-3">Hải Anh Trà</h1>
+        <!-- thêm data-split để GSAP splitText -->
+        <h1 class="hero-title fw-extrabold mb-2" data-split>Hải Anh Trà</h1>
+        <svg class="hero-underline" viewBox="0 0 560 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 40 C 120 20, 220 20, 330 40 S 520 65, 550 30"
+                  stroke="url(#g1)" stroke-width="4" stroke-linecap="round" fill="none" />
+            <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                    <stop offset="0%" stop-color="#22c55e" />
+                    <stop offset="100%" stop-color="#0ea5e9" />
+                </linearGradient>
+            </defs>
+        </svg>
         <p class="hero-sub lead mb-4">Tinh Hoa Giá Trị Việt — chất vị mộc, hậu ngọt thanh.</p>
         <div class="d-flex justify-content-center gap-3">
             <a class="btn btn-light btn-lg px-4" asp-controller="Products" asp-action="Index" asp-route-type="Tea">Khám phá Trà</a>
@@ -25,7 +212,7 @@
 <section id="story" class="container mb-5">
     <div class="row g-4 align-items-center">
         <div class="col-lg-5">
-            <div class="story-card p-4 rounded-4">
+            <div class="story-card p-4 rounded-4 card-hover">
                 <h2 class="fw-bold mb-3">Câu chuyện Hải Anh Trà</h2>
                 <p class="text-muted mb-3">
                     Từ nương chè Thái Nguyên, chúng tôi tôn trọng quy trình thủ công – tuyển chọn, sao sấy, bảo quản kỹ, để giữ trọn hậu vị ngọt thanh.
@@ -39,7 +226,7 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <div class="story-figure rounded-4 overflow-hidden position-relative">
+            <div class="story-figure rounded-4 overflow-hidden position-relative py-4 card-hover">
                 <img src="~/images/sections/story.png" class="w-100 object-fit-cover" style="height:460px;" alt="Câu chuyện Hải Anh Trà" />
                 <div class="story-figure__overlay"></div>
             </div>
@@ -67,11 +254,11 @@
             @foreach (var p in Model.FeaturedTeas)
             {
                 <div class="col-6 col-md-4 col-xl-3">
-                    <div class="tea-card h-100 rounded-4 overflow-hidden card-hover">
+                    <div class="tea-card h-100 rounded-4 overflow-hidden card-hover" data-tilt>
                         <div class="tea-card__img">
                             <img src="@p.ImageUrl" alt="@p.Name" />
                         </div>
-                        <div class="tea-card__body">
+                        <div class="tea-card__body p-3">
                             <h3 class="h6 mb-1">@p.Name</h3>
                             @if (p.Price.HasValue)
                             {
@@ -110,11 +297,11 @@
             @foreach (var p in Model.FeaturedTools)
             {
                 <div class="col-6 col-md-4 col-xl-3">
-                    <div class="tool-card h-100 rounded-4 overflow-hidden card-hover">
+                    <div class="tool-card h-100 rounded-4 overflow-hidden card-hover" data-tilt>
                         <div class="tool-card__img">
                             <img src="@p.ImageUrl" alt="@p.Name" />
                         </div>
-                        <div class="tool-card__body">
+                        <div class="tool-card__body p-3">
                             <h3 class="h6 mb-1">@p.Name</h3>
                             <div class="small text-secondary">@p.ShortDescription</div>
                             <div class="mt-2 d-flex gap-2">
@@ -131,7 +318,7 @@
 
 <!-- ===== RITUAL (nghi lễ pha) ===== -->
 <section id="ritual" class="container mb-5">
-    <div class="rounded-4 p-4 ritual-wrap">
+    <div class="rounded-4 p-4 ritual-wrap card-hover">
         <div class="row g-4 align-items-center">
             <div class="col-lg-6">
                 <h2 class="fw-bold mb-2">Nghi lễ pha trà</h2>
@@ -166,36 +353,6 @@
     </div>
 </section>
 
-<!-- ===== GUIDES (bài viết) ===== -->
-<section id="guides" class="container mb-5">
-    <div class="d-flex align-items-end justify-content-between mb-3">
-        <div>
-            <h2 class="fw-bold m-0">Bài hướng dẫn mới</h2>
-            <div class="text-muted">Pha – bảo quản – chọn trà theo gu</div>
-        </div>
-        <a class="btn btn-outline-primary" asp-controller="Guides" asp-action="Index">Xem tất cả</a>
-    </div>
-
-    @if (!Model.LatestGuides.Any())
-    {
-        <div class="alert alert-info">Chưa có bài viết.</div>
-    }
-    else
-    {
-        <div class="row g-4">
-            @foreach (var g in Model.LatestGuides)
-            {
-                <div class="col-md-4">
-                    <a class="guide-card d-block rounded-4 p-3 card-hover" asp-controller="Guides" asp-action="Details" asp-route-slug="@(g.Slug ?? g.Id.ToString())">
-                        <div class="small text-muted mb-1">@g.PublishedAt.ToString("dd/MM/yyyy")</div>
-                        <h3 class="h6 m-0">@g.Title</h3>
-                    </a>
-                </div>
-            }
-        </div>
-    }
-</section>
-
 <!-- ===== CONTACT CTA ===== -->
 <section id="contact" class="container mb-5">
     <div class="cta-strip rounded-4 p-4 d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3">
@@ -217,13 +374,16 @@
         })();
     </script>
 
-    <!-- GSAP (chỉ animate content; nền là ảnh tĩnh) -->
+    <!-- GSAP + ScrollTrigger + Anime.js -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+
     <script>
         (function(){
           gsap.registerPlugin(ScrollTrigger);
-          // split text
+
+          /* ========= HERO: split text + parallax overlay (GSAP) ========= */
           function splitText(el){
             const text = el.textContent.trim();
             el.innerHTML = text.split("").map(ch => `<span class="ch">${ch===' ' ? '&nbsp;' : ch}</span>`).join("");
@@ -232,22 +392,203 @@
           const title = document.querySelector("[data-split]");
           const chars = title ? splitText(title) : [];
           if (chars.length){
-            gsap.from(chars, { y: 38, opacity: 0, rotateZ: 2, ease: "expo.out", duration: 1.05,
-                               stagger: { each: 0.02, from: "center" } });
-            gsap.from(".hero-sub", { y: 16, opacity: 0, duration: .8, delay: .15, ease: "power3.out" });
-            gsap.from(".hero-img__content .btn", { y: 14, opacity: 0, duration: .7, delay: .25, stagger:.08, ease: "power3.out" });
+            gsap.from(chars, {
+              y: 38, opacity: 0, rotateZ: 2, ease: "expo.out", duration: 1.05,
+              stagger: { each: 0.02, from: "center" }
+            });
+            gsap.from(".hero-sub", { y: 16, opacity: 0, duration: .8, delay: .1, ease: "power3.out" });
+            gsap.from(".hero-img__content .btn", { y: 14, opacity: 0, duration: .7, delay: .2, stagger:.08, ease: "power3.out" });
           }
-          // overlay fade nhẹ khi cuộn
+
           gsap.to(".hero-img__overlay", {
             opacity: 0.85, ease: "none",
             scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom top", scrub:true }
           });
-          // reveal các khối
-          ScrollTrigger.batch(".tea-card, .tool-card, .story-card, .story-figure, .guide-card, .brew-figure, .ritual-steps li", {
-            onEnter: batch => gsap.from(batch, { y: 30, opacity: 0, duration: .7, ease: "power2.out", stagger: 0.06 }),
-            start: "top 85%"
+          gsap.to(".hero-img__bg", {
+            y: () => (window.innerWidth >= 992 ? -60 : -30),
+            ease: "none",
+            scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom top", scrub:true }
           });
+
+          /* ========= ScrollTrigger helper để kích hoạt Anime.js ========= */
+          function onEnterOnce(trigger, fn){
+            ScrollTrigger.create({ trigger, start:"top 85%", once:true, onEnter: fn });
+          }
+
+          /* ========= 1) Hero underline PRO: draw + dot chạy theo path + gradient sống ========= */
+          function heroUnderlinePro(){
+            const svg = document.querySelector(".hero-underline");
+            if (!svg || !window.anime) return;
+            const path = svg.querySelector("path");
+            if (!path) return;
+
+            // Vẽ nét lần đầu
+            const len = path.getTotalLength();
+            path.style.strokeDasharray = len;
+            path.style.strokeDashoffset = len;
+            anime({ targets: path, strokeDashoffset: [len, 0], duration: 1800, easing: 'easeInOutSine' });
+
+            // Dot chạy theo path
+            const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+            dot.setAttribute('r','5'); dot.setAttribute('fill','#fff');
+            svg.appendChild(dot);
+            const motion = anime.path(path);
+            anime({
+              targets: dot,
+              translateX: motion('x'), translateY: motion('y'), rotate: motion('angle'),
+              duration: 3500, easing: 'easeInOutSine', loop:true, direction:'alternate'
+            });
+
+            // Gradient “thở”
+            const g = svg.querySelector('#g1');
+            if (g){
+              const stops = g.querySelectorAll('stop');
+              if (stops[0] && stops[1]){
+                anime({ targets: stops[0], offset: ['0%','35%'], duration: 3000, easing:'easeInOutQuad', direction:'alternate', loop:true });
+                anime({ targets: stops[1], offset: ['100%','65%'], duration: 3000, easing:'easeInOutQuad', direction:'alternate', loop:true });
+              }
+            }
+          }
+
+          /* ========= 2) Hero “hơi trà” li ti (SVG circles) ========= */
+          function heroSteam(){
+            const svg = document.querySelector('.hero-fx');
+            if (!svg || !window.anime) return;
+
+            function bubble(){
+              const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+              const x = Math.random()*100; // 0..100 viewBox units
+              const r = 0.6 + Math.random()*1.2;
+              c.setAttribute('cx', x);
+              c.setAttribute('cy', 80 + Math.random()*15); // bắt đầu phía dưới
+              c.setAttribute('r', r);
+              c.setAttribute('fill', 'rgba(255,255,255,.35)');
+              svg.appendChild(c);
+
+              anime({
+                targets: c,
+                cy: 10 + Math.random()*20,
+                r: r * (1.2 + Math.random()*0.8),
+                opacity: [{value:.6, duration:300}, {value:0, duration:1400}],
+                duration: 2200 + Math.random()*1800,
+                easing: 'easeOutQuad',
+                complete: () => { c.remove(); }
+              });
+            }
+
+            // nhịp tạo bọt
+            setInterval(()=> { for(let i=0;i<2;i++) bubble(); }, 500);
+          }
+
+          /* ========= 3) Story figure: clip-path reveal (Anime.js) ========= */
+          onEnterOnce('#story', () => {
+            anime({
+              targets: '.story-figure',
+              clipPath: ['inset(12% 12% round 24px)', 'inset(0% 0% round 24px)'],
+              duration: 1000, easing: 'easeOutCubic'
+            });
+            anime({
+              targets: '.story-card',
+              translateY: [24,0], opacity: [0,1],
+              duration: 800, easing: 'easeOutQuad'
+            });
+          });
+
+          /* ========= 4) Cards: stagger reveal (tea + tool + guide) ========= */
+          onEnterOnce('#teas', () => {
+            anime({
+              targets: '#teas .tea-card',
+              translateY: [36, 0], opacity: [0,1],
+              delay: anime.stagger(80, {start: 50}),
+              duration: 700, easing: 'easeOutCubic'
+            });
+          });
+
+          onEnterOnce('#tools', () => {
+            anime({
+              targets: '#tools .tool-card',
+              translateY: [36, 0], opacity: [0,1],
+              delay: anime.stagger(80, {start: 50}),
+              duration: 700, easing: 'easeOutCubic'
+            });
+          });
+
+          onEnterOnce('#guides', () => {
+            anime({
+              targets: '#guides .guide-card',
+              translateY: [30, 0], opacity: [0,1],
+              delay: anime.stagger(90, {start: 60}),
+              duration: 650, easing: 'easeOutCubic'
+            });
+          });
+
+          /* ========= 5) Ritual steps: số bật “spring” + slide ========= */
+          onEnterOnce('#ritual', () => {
+            anime({
+              targets: '#ritual .ritual-steps li',
+              translateX: [-24, 0], opacity: [0,1],
+              delay: anime.stagger(120),
+              duration: 700, easing: 'easeOutQuad'
+            });
+            anime({
+              targets: '#ritual .ritual-steps li span',
+              scale: [0, 1],
+              delay: anime.stagger(120),
+              duration: 700, easing: 'spring(1, 80, 12, 0)'
+            });
+          });
+
+          /* ========= 6) Ripple click cho tất cả .btn ========= */
+          function installRipple(){
+            document.addEventListener('click', (e)=>{
+              const btn = e.target.closest('.btn'); if(!btn) return;
+              const r = document.createElement('span');
+              r.className = 'rfx'; btn.appendChild(r);
+              const rect = btn.getBoundingClientRect();
+              r.style.left = (e.clientX - rect.left) + 'px';
+              r.style.top  = (e.clientY - rect.top)  + 'px';
+              const maxD = Math.max(rect.width, rect.height) * 1.2;
+              anime({
+                targets: r,
+                scale: [0, maxD/12],
+                opacity: [{value:.35, duration:120},{value:0, duration:400}],
+                duration: 520, easing: 'easeOutQuad',
+                complete: ()=> r.remove()
+              });
+            });
+          }
+
+          /* ========= 7) Voices: carousel fade tự chạy ========= */
+          function voicesCarousel(){
+            const items = Array.from(document.querySelectorAll('#voices .voice'));
+            if (items.length <= 1) return;
+            let i = 0;
+            items[0].classList.add('is-active');
+            function show(next){
+              const curr = items[i];
+              const nxt  = items[next];
+              nxt.style.opacity = 0;
+              nxt.classList.add('is-active');
+              anime({
+                targets: [curr, nxt],
+                opacity: (el, idx) => idx===0 ? [1,0] : [0,1],
+                duration: 600, easing: 'easeInOutQuad',
+                complete: () => { curr.classList.remove('is-active'); }
+              });
+              i = next;
+            }
+            setInterval(()=> show((i+1)%items.length), 3000);
+          }
+
+          /* ========= Khởi chạy các hiệu ứng Anime.js ========= */
+          function startAnimeStuff(){
+            heroUnderlinePro();
+            heroSteam();
+            installRipple();
+            voicesCarousel();
+          }
+          if (document.readyState === 'complete') startAnimeStuff();
+          else window.addEventListener('load', startAnimeStuff);
         })();
     </script>
 }
-    
